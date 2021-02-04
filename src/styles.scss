@@ -1,1 +1,58 @@
 /* You can add global styles to this file, and also import other style files */
+
+$padding: 12px;
+
+.container {
+  margin: 0 auto;
+  max-width: 80%;
+
+  .row {
+    padding: $padding / 3;
+    display: flex;
+    justify-content: center;
+
+    .col {
+      display: flex;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      padding: 10px;
+      min-height: 1px;
+
+      .s6 {
+        width: 50%;
+        left: auto;
+        right: auto;
+      }
+
+      .s12 {
+        width: 100%;
+        left: auto;
+        right: auto;
+      }
+    }
+  }
+}
+
+input {
+  display: flex;
+  line-height: $padding * 2;
+  font-size: $padding;
+  border-radius: 3px;
+  border: 1px solid grey;
+  text-align: center;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.btn {
+  display: inline-block;
+  line-height: 36px;
+  padding: 0 16px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 3px;
+  border: 1px solid grey;
+}

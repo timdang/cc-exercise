@@ -1,0 +1,79 @@
+<div class="form-border">
+  <div class="row">Enter your credit card information {{ cardType }}</div>
+  <div class="row">
+    <div class="col s12">
+      <input
+        type="text"
+        class="w100"
+        placeholder="Name"
+        [(ngModel)]="creditCard.cardholder"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12">
+      <input
+        #cardNumber
+        type="text"
+        class="w100"
+        placeholder="Card Number"
+        (keypress)="onCardNumberKeypress(cardNumber.value)"
+        [(ngModel)]="creditCard.cardNumber"
+        [maxLength]="cardType === CardType.Amex ? 17 : 19"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12">
+      <input
+        type="text"
+        class="w100"
+        placeholder="CVV2"
+        [maxLength]="cardType === CardType.Amex ? 4 : 3"
+        [(ngModel)]="creditCard.cvv2"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s6">
+      <input
+        #expirationMonth="ngModel"
+        type="text"
+        class="w100"
+        placeholder="Exp. Month"
+        maxlength="2"
+        min="1"
+        max="12"
+        [(ngModel)]="creditCard.expirationMonth"
+        [pattern]="formRegex.month"
+        (blur)="validateExpirationDate()"
+        [class.invalid]="expirationMonth.errors?.pattern"
+      />
+    </div>
+    <div class="col s6">
+      <input
+        #expirationYear="ngModel"
+        type="text"
+        class="w100"
+        placeholder="Exp. Year"
+        maxlength="4"
+        [(ngModel)]="creditCard.expirationYear"
+        [pattern]="formRegex.year"
+        (blur)="validateExpirationDate()"
+        [class.invalid]="expirationYear.errors?.pattern"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12">
+      <app-credit-card-icons [cardType]="cardType"></app-credit-card-icons>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12">
+      <button type="button" class="btn w100" [disabled]="formInvalid">
+        Submit
+      </button>
+    </div>
+  </div>
+</div>

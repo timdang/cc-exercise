@@ -1,0 +1,21 @@
+:host {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .container {
+    aspect-ratio: 6 / 3;
+    display: flex;
+    padding-left: 5px;
+    padding-right: 5px;
+
+    .card {
+      width: 40px;
+      filter: grayscale(100%);
+
+      &.highlight {
+        filter: unset;
+      }
+    }
+  }
+}
