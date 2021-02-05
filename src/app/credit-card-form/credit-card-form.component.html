@@ -1,12 +1,17 @@
 <div class="form-border">
-  <div class="row">Enter your credit card information {{ cardType }}</div>
+  <div class="row">Enter your credit card information</div>
   <div class="row">
     <div class="col s12">
       <input
+        #cardHolder
         type="text"
         class="w100"
         placeholder="Name"
-        [(ngModel)]="creditCard.cardholder"
+        [(ngModel)]="creditCard.cardholder.value"
+        (blur)="validateCardholder(cardHolder.value)"
+        [class.invalid]="
+          creditCard.cardholder.value && !creditCard.cardholder.isValid
+        "
       />
     </div>
   </div>
@@ -18,49 +23,61 @@
         class="w100"
         placeholder="Card Number"
         (keypress)="onCardNumberKeypress(cardNumber.value)"
-        [(ngModel)]="creditCard.cardNumber"
+        (blur)="validateCreditCardNumber()"
+        [(ngModel)]="creditCard.cardNumber.value"
         [maxLength]="cardType === CardType.Amex ? 17 : 19"
+        [class.invalid]="
+          creditCard.cardNumber.value && !creditCard.cardNumber.isValid
+        "
       />
     </div>
   </div>
   <div class="row">
     <div class="col s12">
       <input
+        #cvv2
         type="text"
         class="w100"
         placeholder="CVV2"
         [maxLength]="cardType === CardType.Amex ? 4 : 3"
-        [(ngModel)]="creditCard.cvv2"
+        [(ngModel)]="creditCard.cvv2.value"
+        (blur)="validateCVV2Length(cvv2.value)"
+        [class.invalid]="
+          creditCard.cvv2.value &&
+          creditCard.cardNumber.value &&
+          !creditCard.cvv2.isValid
+        "
       />
     </div>
   </div>
   <div class="row">
     <div class="col s6">
       <input
-        #expirationMonth="ngModel"
         type="text"
         class="w100"
         placeholder="Exp. Month"
         maxlength="2"
         min="1"
         max="12"
-        [(ngModel)]="creditCard.expirationMonth"
-        [pattern]="formRegex.month"
+        [(ngModel)]="creditCard.expirationMonth.value"
         (blur)="validateExpirationDate()"
-        [class.invalid]="expirationMonth.errors?.pattern"
+        [class.invalid]="
+          creditCard.expirationMonth.value &&
+          !creditCard.expirationMonth.isValid
+        "
       />
     </div>
     <div class="col s6">
       <input
-        #expirationYear="ngModel"
         type="text"
         class="w100"
         placeholder="Exp. Year"
         maxlength="4"
-        [(ngModel)]="creditCard.expirationYear"
-        [pattern]="formRegex.year"
+        [(ngModel)]="creditCard.expirationYear.value"
         (blur)="validateExpirationDate()"
-        [class.invalid]="expirationYear.errors?.pattern"
+        [class.invalid]="
+          creditCard.expirationYear.value && !creditCard.expirationYear.isValid
+        "
       />
     </div>
   </div>
@@ -71,9 +88,17 @@
   </div>
   <div class="row">
     <div class="col s12">
-      <button type="button" class="btn w100" [disabled]="formInvalid">
+      <button
+        type="button"
+        class="btn w100"
+        [disabled]="!formValid || formSubmitting"
+        (click)="onSubmission()"
+      >
         Submit
       </button>
     </div>
+  </div>
+  <div class="row" *ngIf="formSubmitting">
+    <div class="col s12">Your information has been submitted.</div>
   </div>
 </div>

@@ -15,16 +15,21 @@ describe('CreditFormServiceService', () => {
   });
 
   it('validate Amex cards', () => {
-    const case1 = '43423-423423-3424';
+    const case1 = '37423-423423-3424';
     expect(CreditFormService.isAmericanExpress(case1)).toBeTrue();
     expect(CreditFormService.isVisaCard(case1)).toBeFalse();
     expect(CreditFormService.isValidCardNumber(case1)).toBeTrue();
   });
 
   it('validate Visa cards', () => {
-    const case2 = '3743-3437-3438-3472';
-    expect(CreditFormService.isAmericanExpress(case2)).toBeTrue();
-    expect(CreditFormService.isVisaCard(case2)).toBeFalse();
+    const case2 = '4743-3437-3438-3472';
+    expect(CreditFormService.isAmericanExpress(case2)).toBeFalse();
+    expect(CreditFormService.isVisaCard(case2)).toBeTrue();
     expect(CreditFormService.isValidCardNumber(case2)).toBeTrue();
+  });
+
+  it('validate non-numbers in cards', () => {
+    const case1 = '3743-34b7-3438-3472';
+    expect(CreditFormService.isValidCardNumber(case1)).toBeFalse();
   });
 });

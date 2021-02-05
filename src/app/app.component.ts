@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import { CreditForm } from './models/creditCardForm';
 
 @Component({
@@ -10,7 +11,6 @@ export class AppComponent {
   title = 'cc-exercise';
 
   handleFormSubmission(event: CreditForm): void {
-    // TBD
     console.log('emitted:', event);
   }
 }

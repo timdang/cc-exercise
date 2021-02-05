@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { CreditForm } from '../models/creditCardForm';
 
 @Injectable({
@@ -18,26 +19,52 @@ export class CreditFormService {
   public static isValidCardNumber(val: any): boolean {
     const numberString: string = val?.toString();
     return (
-      (CreditFormService.isAmericanExpress(val) &&
-        numberString.length === 15) ||
-      (CreditFormService.isVisaCard(val) && numberString.length === 16)
+      formRegex.cardNumber.test(val) &&
+      ((CreditFormService.isAmericanExpress(val) &&
+        numberString.length === 17) ||
+        (CreditFormService.isVisaCard(val) && numberString.length === 19))
     );
   }
 
-  public static isValidExpirationDate(card: Partial<CreditForm>): boolean {
+  public static validateCardNumber(creditForm: CreditForm): CreditForm {
+    const validatedForm = { ...creditForm };
+    if (validatedForm.cardNumber) {
+      validatedForm.cardNumber.isValid = CreditFormService.isValidCardNumber(
+        creditForm.cardNumber.value
+      );
+    }
+    return validatedForm;
+  }
+
+  public static isValidExpirationDate(creditForm: CreditForm): CreditForm {
     // I'd probably use a library like date-fns for moment.js
     const expYear: number =
-      card && card.expirationYear ? +card.expirationYear : 2020;
+      (creditForm?.expirationYear?.value &&
+        +creditForm.expirationYear?.value) ||
+      2020;
     const expMonth: number =
-      card && card.expirationMonth ? +card.expirationMonth : 1;
+      (creditForm?.expirationMonth?.value &&
+        +creditForm.expirationMonth.value) ||
+      0;
     const expDate = new Date(expYear, expMonth, 0);
     const today = new Date();
     const firstOfTheMonth = new Date(today.getFullYear(), today.getMonth(), 0);
-    return expDate > firstOfTheMonth;
+
+    const validatedForm = { ...creditForm };
+    const validExpiration = expDate > firstOfTheMonth;
+    if (validatedForm.expirationYear?.value) {
+      validatedForm.expirationYear.isValid = validExpiration;
+    }
+    if (validatedForm.expirationMonth?.value) {
+      validatedForm.expirationMonth.isValid =
+        (validatedForm.expirationYear.value ? validExpiration : true) &&
+        formRegex.month.test(validatedForm.expirationMonth?.value);
+    }
+    return validatedForm;
   }
 }
 
 export const formRegex = {
-  month: '^(1[0-2]|[1-9])$',
-  year: '^(20)d{2}$',
+  month: /^(1[0-2]|0[1-9])$/,
+  cardNumber: /^[0-9-]*$/,
 };

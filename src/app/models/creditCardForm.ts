@@ -1,7 +1,12 @@
 export interface CreditForm {
-  cvv2: string | null;
-  cardholder: string | null;
-  expirationMonth: string | null;
-  expirationYear: string | null;
-  cardNumber: string | null;
+  cvv2: CreditCardFormElement;
+  cardholder: CreditCardFormElement;
+  expirationMonth: CreditCardFormElement;
+  expirationYear: CreditCardFormElement;
+  cardNumber: CreditCardFormElement;
+}
+
+interface CreditCardFormElement {
+  value: string | null;
+  isValid: boolean;
 }
